@@ -117,7 +117,7 @@
             background-color: #9b59b6;
         }
         .btn-auto-senior {
-            background-color: #d35400; 
+            background-color: #1abc9c;
             color: white;
             border: none;
             border-radius: 4px;
@@ -127,7 +127,7 @@
             font-size: 12px;
         }
         .btn-auto-senior:hover {
-            background-color: #e67e22;
+            background-color: #16a085; 
         }
         .btn-add-text {
             background-color: #27ae60;
@@ -212,6 +212,14 @@
         .weekend {
             background-color: #9ab3cf;
         }
+        
+        th.col-is-full, td.duty-cell.col-is-full {
+            background-color: #ffe0e0;
+        }
+        th.weekend.col-is-full, td.duty-cell.weekend.col-is-full {
+            background-color: #e3a8a8;
+        }
+
         .duty-cell {
             cursor: pointer;
             height: 18px;
@@ -227,6 +235,12 @@
         .row-highlight td.duty-cell {
             background-color: #fdf5e6 !important;
         }
+        
+        .row-highlight td.duty-cell.has-excuse {
+            background-color: #fdf5e6 !important;
+            color: #2f3640 !important; 
+        }
+
         .name-highlight {
             background-color: #f1c40f !important;
             color: #2f3640 !important;
@@ -244,11 +258,16 @@
             font-weight: bold;
             color: #d35400;
         }
-        .has-excuse {
+        td.duty-cell.has-excuse {
             background-color: #c0392b !important;
             color: white !important;
             font-weight: bold;
         }
+        .duty-cell.has-excuse:hover {
+            background-color: #96281b !important;
+            color: white !important;
+        }
+
         .total-col {
             background-color: #ecf0f1;
             font-weight: bold;
@@ -268,14 +287,16 @@
             font-weight: bold;
             padding: 4px 1px;
         }
+        
         .day-empty {
-            background-color: #e74c3c;
+            background-color: #2ecc71; 
             color: white;
         }
         .day-full {
-            background-color: #2ecc71;
+            background-color: #e74c3c;
             color: white;
         }
+
         #ui-warning {
             visibility: hidden;
             min-width: 250px;
@@ -328,8 +349,8 @@
         <span id="result"></span>
         
         <div class="button-group">
-            <button class="btn-auto-senior" onclick="autoAssignDuties('seniority')">Kıdeme Göre Dağıt</button>
-            <button class="btn-auto" onclick="autoAssignDuties('equal')">Eşit Dağıt</button>
+            <button class="btn-auto-senior" onclick="autoAssignDuties('seniority')">Kıdeme Göre Dağıt ⭐</button>
+            <button class="btn-auto" onclick="autoAssignDuties('equal')">Eşit Dağıt ⚖️</button>
             <button class="btn-danger" onclick="clearCurrentMonthDuties()">Tümünü Temizle (Bu Ay)</button>
         </div>
     </div>
@@ -643,6 +664,7 @@
                         updateDailyStatus();
                         saveToStorage();
                     };
+                    
                     td.oncontextmenu = function(e) {
                         e.preventDefault(); 
                         if (person.duties[monthKey][i] === 'X') {
@@ -650,6 +672,20 @@
                             this.className = 'duty-cell' + (isWeekend ? ' weekend' : '');
                             delete person.duties[monthKey][i];
                         } else {
+                            // TAMAMI MAZERETLİ OLAMAZ KONTROLÜ
+                            let excusedCount = 0;
+                            for (let p of personnelData) {
+                                if (p.duties[monthKey] && p.duties[monthKey][i] === 'X') {
+                                    excusedCount++;
+                                }
+                            }
+                            
+                            // Eğer bu kişiyi de X yaparsak tüm liste X olmuş olacak
+                            if (excusedCount >= personnelData.length - 1) {
+                                showWarning(`⚠️ ${i} ${monthNames[currentMonth]} tarihinde tüm personeller mazeretli olamaz! En az 1 kişi kalmalıdır.`);
+                                return; 
+                            }
+
                             this.textContent = 'X';
                             this.className = 'duty-cell has-excuse' + (isWeekend ? ' weekend' : '');
                             person.duties[monthKey][i] = 'X';
@@ -678,6 +714,10 @@
         function updateDailyStatus() {
             const statusRow = document.getElementById('dailyStatusRow');
             statusRow.innerHTML = '<td colspan="2" style="text-align:right; font-size:11px;">GÜN DURUMU:</td>';
+            
+            const daysRow = document.getElementById('daysRow');
+            const tableBody = document.getElementById('tableBody');
+
             for (let i = 1; i <= 31; i++) {
                 if (i > daysInMonth) {
                     const td = document.createElement('td');
@@ -696,9 +736,19 @@
                 if (hasAnyone) {
                     td.textContent = 'D';
                     td.className = 'day-full';
+                    
+                    if (daysRow.children[i + 1]) daysRow.children[i + 1].classList.add('col-is-full');
+                    for (let row of tableBody.children) {
+                        if (row.children[i + 1]) row.children[i + 1].classList.add('col-is-full');
+                    }
                 } else {
                     td.textContent = 'B';
                     td.className = 'day-empty';
+                    
+                    if (daysRow.children[i + 1]) daysRow.children[i + 1].classList.remove('col-is-full');
+                    for (let row of tableBody.children) {
+                        if (row.children[i + 1]) row.children[i + 1].classList.remove('col-is-full');
+                    }
                 }
                 statusRow.appendChild(td);
             }
@@ -712,7 +762,7 @@
             const resultSpan = document.getElementById('result');
             if (!day || day < 1 || day > daysInMonth) {
                 resultSpan.textContent = `Lütfen bu ay için 1-${daysInMonth} arası bir gün girin.`;
-                resultSpan.style.color = "#c23616";
+                resultSpan.style.color = "#e74c3c";
                 return;
             }
             const onDuty1 = personnelData.filter(p => p.duties[monthKey] && p.duties[monthKey][day] === '1').map(p => p.name);
@@ -720,9 +770,9 @@
             const onExcuse = personnelData.filter(p => p.duties[monthKey] && p.duties[monthKey][day] === 'X').map(p => p.name);
             let text = "";
             if (onDuty1.length === 0 && onDutyO.length === 0) {
-                text = `<span style="color:#e74c3c;">${day} ${monthNames[currentMonth]} tamamen BOŞ.</span> `;
+                text = `<span style="color:#2ecc71;">${day} ${monthNames[currentMonth]} tamamen BOŞ.</span> `;
             } else {
-                text = `<span style="color:#2ecc71;">${day} ${monthNames[currentMonth]} DOLU.</span> `;
+                text = `<span style="color:#e74c3c;">${day} ${monthNames[currentMonth]} DOLU.</span> `;
                 if (onDuty1.length > 0) text += `<b>Nöbetçi:</b> ${onDuty1.map(escapeHtml).join(', ')}. `;
                 if (onDutyO.length > 0) text += `<b>Oryantasyon:</b> ${onDutyO.map(escapeHtml).join(', ')}. `;
             }
@@ -872,22 +922,18 @@
 
                 if (eligiblePersonnel.length > 0) {
                     if (mode === 'equal') {
-                        // 1. En az nöbeti olanları bul (Tam Eşitlik)
                         let minCount = Math.min(...eligiblePersonnel.map(e => e.actualCount));
                         let tiedPersonnel = eligiblePersonnel.filter(e => e.actualCount === minCount);
                         
-                        // 2. Kendi içinde en kıdemsizleri bul (+1 Nöbet için öncelik)
                         let maxTerm = Math.max(...tiedPersonnel.map(e => getPersonnelTerm(e.person)));
                         let mostJuniorPersonnel = tiedPersonnel.filter(e => getPersonnelTerm(e.person) === maxTerm);
                         
-                        // 3. O piti piti (Aynı kıdemde olanlar arasından rastgele)
                         let randomIndex = Math.floor(Math.random() * mostJuniorPersonnel.length);
                         let selectedPerson = mostJuniorPersonnel[randomIndex].person;
                         
                         selectedPerson.duties[monthKey][day] = '1';
                         changesMade = true;
                     } else {
-                        // Orijinal Kıdem Dağıtımı Mantığı
                         eligiblePersonnel.sort((a, b) => {
                             if (priorityDutyDay && a.dayTermPriority !== b.dayTermPriority) return a.dayTermPriority - b.dayTermPriority;
                             if (a.effectiveCount !== b.effectiveCount) return a.effectiveCount - b.effectiveCount;
