@@ -580,11 +580,18 @@
                         if (this.textContent === '') {
                             let prevDuty = person.duties[monthKey][i - 1];
                             let nextDuty = person.duties[monthKey][i + 1];
-                            if ((prevDuty === '1' || prevDuty === 'O') || (nextDuty === '1' || nextDuty === 'O')) {
-                                showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde nöbet yazılamaz!`);
+                            
+                            let existingDuty = personnelData.find(p => p.id !== person.id && p.duties[monthKey] && p.duties[monthKey][i] === '1');
+                            let assigning = existingDuty ? 'O' : '1';
+
+                            if (assigning === '1' && (prevDuty === '1' || nextDuty === '1')) {
+                                showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde nöbet (1) yazılamaz!`);
                                 return;
                             }
-                            let existingDuty = personnelData.find(p => p.id !== person.id && p.duties[monthKey] && p.duties[monthKey][i] === '1');
+                            if (assigning === 'O' && (prevDuty === 'O' || nextDuty === 'O')) {
+                                showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde oryantasyon (O) yazılamaz!`);
+                                return;
+                            }
 
                             if (existingDuty) {
                                 this.textContent = 'O';
@@ -799,7 +806,7 @@
                     if (p.duties[monthKey][day] === 'X') continue;
                     let prevDay = p.duties[monthKey][day - 1];
                     let nextDay = p.duties[monthKey][day + 1];
-                    if ((prevDay === '1' || prevDay === 'O') || (nextDay === '1' || nextDay === 'O')) continue;
+                    if (prevDay === '1' || nextDay === '1') continue;
                     
                     let actualCount = Object.values(p.duties[monthKey]).filter(val => val === '1' || val === 'O').length;
                     let term = getPersonnelTerm(p);
