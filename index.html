@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karargah Nöbet Çizelgesi</title>
+    <title>Karargah Giriş Nöbet Çizelgesi</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -197,6 +197,7 @@
         th {
             background-color: #ecf0f1;
             font-weight: bold;
+            transition: background-color 0.2s, color 0.2s;
         }
         .personnel-name {
             text-align: left;
@@ -206,6 +207,7 @@
             font-weight: 500;
             font-size: 11px;
             user-select: none;
+            transition: background-color 0.2s, color 0.2s;
         }
         .weekend {
             background-color: #9ab3cf;
@@ -213,13 +215,28 @@
         .duty-cell {
             cursor: pointer;
             height: 18px;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
             user-select: none;
         }
         .duty-cell:hover {
             background-color: #f1c40f !important;
             color: #2f3640 !important;
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
         }
+        
+        /* HOVER HIGHLIGHT EFEKTLERİ */
+        .row-highlight td.duty-cell {
+            background-color: #fdf5e6 !important;
+        }
+        .name-highlight {
+            background-color: #f1c40f !important;
+            color: #2f3640 !important;
+        }
+        .col-highlight {
+            background-color: #f1c40f !important;
+            color: #2f3640 !important;
+        }
+
         .has-duty {
             font-weight: bold;
             color: #2c3e50;
@@ -572,6 +589,19 @@
                         td.textContent = 'X';
                         td.classList.add('has-excuse');
                     }
+                    
+                    // HIGHLIGHT EVENTLERİ
+                    td.onmouseenter = function() {
+                        tr.classList.add('row-highlight');
+                        tr.children[1].classList.add('name-highlight');
+                        daysRow.children[i + 1].classList.add('col-highlight');
+                    };
+                    td.onmouseleave = function() {
+                        tr.classList.remove('row-highlight');
+                        tr.children[1].classList.remove('name-highlight');
+                        daysRow.children[i + 1].classList.remove('col-highlight');
+                    };
+
                     td.onclick = function() {
                         if (person.duties[monthKey][i] === 'X') {
                             showWarning(`⚠️ ${escapeHtml(person.name)} bu gün <b>izinli/mazeretli</b>.<br>Kaldırmak için sağ tıklayın.`);
@@ -710,7 +740,6 @@
             nameStr = nameStr.trim();
             if (!nameStr) return;
 
-            // YENİ EKLENEN KONTROL: Sadece harf, boşluk ve nokta (.) kullanımına izin verir.
             let nameRegex = /^[A-Za-zÇĞİÖŞÜçğıöşü\s.]+$/;
             if (!nameRegex.test(nameStr)) {
                 alert("Hata: Rütbe ve isim kısmında sadece harf, boşluk ve nokta (.) kullanabilirsiniz. Lütfen sayı veya başka semboller girmeyiniz.");
