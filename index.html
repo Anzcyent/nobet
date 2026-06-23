@@ -224,7 +224,6 @@
             box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
         }
         
-        /* HOVER HIGHLIGHT EFEKTLERİ */
         .row-highlight td.duty-cell {
             background-color: #fdf5e6 !important;
         }
@@ -590,7 +589,6 @@
                         td.classList.add('has-excuse');
                     }
                     
-                    // HIGHLIGHT EVENTLERİ
                     td.onmouseenter = function() {
                         tr.classList.add('row-highlight');
                         tr.children[1].classList.add('name-highlight');
@@ -850,6 +848,7 @@
                     let actualCount = Object.values(p.duties[monthKey]).filter(val => val === '1' || val === 'O').length;
                     let term = getPersonnelTerm(p);
                     let dayTermPriority = getDayTermPriority(dayOfWeek, term);
+                    
                     if (mode === 'seniority') {
                         let targetCount = targetCounts[p.id] || 1;
                         if (actualCount >= targetCount) continue;
@@ -872,16 +871,34 @@
                 }
 
                 if (eligiblePersonnel.length > 0) {
-                    eligiblePersonnel.sort((a, b) => {
-                        if (priorityDutyDay && a.dayTermPriority !== b.dayTermPriority) return a.dayTermPriority - b.dayTermPriority;
-                        if (a.effectiveCount !== b.effectiveCount) return a.effectiveCount - b.effectiveCount;
-                        if (a.actualCount !== b.actualCount) return a.actualCount - b.actualCount;
-                        if (mode === 'seniority' && a.targetCount !== b.targetCount) return b.targetCount - a.targetCount;
-                        return a.person.id - b.person.id;
-                    });
-                    let selectedPerson = eligiblePersonnel[0].person;
-                    selectedPerson.duties[monthKey][day] = '1';
-                    changesMade = true;
+                    if (mode === 'equal') {
+                        // 1. En az nöbeti olanları bul (Tam Eşitlik)
+                        let minCount = Math.min(...eligiblePersonnel.map(e => e.actualCount));
+                        let tiedPersonnel = eligiblePersonnel.filter(e => e.actualCount === minCount);
+                        
+                        // 2. Kendi içinde en kıdemsizleri bul (+1 Nöbet için öncelik)
+                        let maxTerm = Math.max(...tiedPersonnel.map(e => getPersonnelTerm(e.person)));
+                        let mostJuniorPersonnel = tiedPersonnel.filter(e => getPersonnelTerm(e.person) === maxTerm);
+                        
+                        // 3. O piti piti (Aynı kıdemde olanlar arasından rastgele)
+                        let randomIndex = Math.floor(Math.random() * mostJuniorPersonnel.length);
+                        let selectedPerson = mostJuniorPersonnel[randomIndex].person;
+                        
+                        selectedPerson.duties[monthKey][day] = '1';
+                        changesMade = true;
+                    } else {
+                        // Orijinal Kıdem Dağıtımı Mantığı
+                        eligiblePersonnel.sort((a, b) => {
+                            if (priorityDutyDay && a.dayTermPriority !== b.dayTermPriority) return a.dayTermPriority - b.dayTermPriority;
+                            if (a.effectiveCount !== b.effectiveCount) return a.effectiveCount - b.effectiveCount;
+                            if (a.actualCount !== b.actualCount) return a.actualCount - b.actualCount;
+                            if (a.targetCount !== b.targetCount) return b.targetCount - a.targetCount;
+                            return a.person.id - b.person.id;
+                        });
+                        let selectedPerson = eligiblePersonnel[0].person;
+                        selectedPerson.duties[monthKey][day] = '1';
+                        changesMade = true;
+                    }
                 } else {
                     unassignedDays.push(day);
                 }
