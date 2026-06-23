@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karargah Nöbet Çizelgesi</title>
+    <title>Kompakt Nöbet Çizelgesi Playground</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -709,19 +709,29 @@
             if (!nameStr) return;
             nameStr = nameStr.trim();
             if (!nameStr) return;
+
+            // YENİ EKLENEN KONTROL: Sadece harf, boşluk ve nokta (.) kullanımına izin verir.
+            let nameRegex = /^[A-Za-zÇĞİÖŞÜçğıöşü\s.]+$/;
+            if (!nameRegex.test(nameStr)) {
+                alert("Hata: Rütbe ve isim kısmında sadece harf, boşluk ve nokta (.) kullanabilirsiniz. Lütfen sayı veya başka semboller girmeyiniz.");
+                return;
+            }
             
             let upperName = nameStr.toUpperCase();
             let hasValidRank = upperName.includes("TĞM.") || upperName.includes("ATĞM.") || upperName.includes("AÇVŞ.") || upperName.includes("ÇVŞ.");
             
             if (!hasValidRank) {
-                alert("Hata: Geçersiz rütbe.");
+                alert("Hata: Geçersiz rütbe. Lütfen geçerli bir rütbe girin (Örn: Tğm., Atğm., vb.).");
                 return;
             }
             
             let termStr = prompt(`Personelin dönemini giriniz:`);
             if (!termStr) return;
             termStr = termStr.trim();
-            if (!/^\d+$/.test(termStr)) return;
+            if (!/^\d+$/.test(termStr)) {
+                alert("Hata: Dönem alanına sadece sayı giriniz!");
+                return;
+            }
             
             const finalName = `${nameStr} [${termStr}]`;
             if (personnelData.some(p => p.name.toUpperCase() === finalName.toUpperCase())) {
