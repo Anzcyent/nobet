@@ -11,19 +11,32 @@
             background-color: #f5f6fa;
             color: #2f3640;
         }
+        
+        /* -- KUSURSUZ ORTALANMIŞ HEADER (PC İÇİN) -- */
         .header-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
-            margin: 10px 0 20px 0;
+            position: relative;
+            margin: 15px auto 25px auto;
+            max-width: 900px;
+            min-height: 45px;
         }
+        .btn-prev {
+            position: absolute;
+            left: 0;
+        }
+        .btn-next {
+            position: absolute;
+            right: 0;
+        }
+        
         .title-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 5px;
-            min-width: 380px;
+            text-align: center;
         }
         .title-wrapper h2 {
             margin: 0;
@@ -31,6 +44,7 @@
             color: #353b48;
             text-align: center;
         }
+        
         .btn-today {
             background-color: #95a5a6;
             color: white;
@@ -45,20 +59,27 @@
         .btn-today:hover {
             background-color: #7f8c8d;
         }
+        
         .btn-nav {
             background-color: #34495e;
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 6px 12px;
+            border-radius: 6px;
+            padding: 8px 16px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .btn-nav:hover {
             background-color: #2c3e50;
+            transform: translateY(-1px);
         }
+        .btn-nav:active {
+            transform: translateY(1px);
+        }
+
         .info-text {
             background-color: #dff9fb;
             color: #130f40;
@@ -68,6 +89,7 @@
             margin-bottom: 10px;
             border-left: 4px solid #686de0;
         }
+        
         .controls {
             background-color: #fff;
             padding: 10px;
@@ -79,6 +101,13 @@
             gap: 10px;
             flex-wrap: wrap;
             font-size: 13px;
+            justify-content: space-between;
+        }
+        .controls-left, .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         input[type="number"] {
             padding: 6px;
@@ -95,15 +124,25 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 12px;
+            transition: all 0.2s;
         }
         button:hover {
             background-color: #00a8ff;
         }
-        .button-group {
-            margin-left: auto; 
-            display: flex;
-            gap: 8px;
+
+        /* FIRÇA BUTONU MASAÜSTÜNDE GİZLİ */
+        .btn-brush {
+            background-color: #34495e;
+            color: white;
+            border: 2px solid #2c3e50;
+            display: none; 
         }
+        .btn-brush.active {
+            background-color: #e74c3c;
+            border-color: #c0392b;
+            box-shadow: 0 0 8px rgba(231, 76, 60, 0.6);
+        }
+
         .btn-danger {
             background-color: #c23616;
         }
@@ -118,25 +157,13 @@
         }
         .btn-auto-senior {
             background-color: #1abc9c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 12px;
         }
         .btn-auto-senior:hover {
             background-color: #16a085; 
         }
         .btn-add-text {
             background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 4px;
             padding: 4px 8px;
-            cursor: pointer;
-            font-weight: bold;
             font-size: 11px;
             white-space: nowrap;
         }
@@ -145,11 +172,7 @@
         }
         .btn-icon-danger {
             background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 4px;
             padding: 2px 5px;
-            cursor: pointer;
             font-size: 10px;
             display: flex;
             align-items: center;
@@ -169,15 +192,19 @@
             font-weight: bold;
             font-size: 13px;
         }
+        
+        /* RESPONSIVE TABLE KODLARI */
         .table-container {
-            overflow-x: auto;
+            overflow: auto; 
+            max-height: 75vh;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding-bottom: 5px;
+            position: relative;
         }
         table {
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             table-layout: fixed;
             min-width: 1020px;
             width: 100%;
@@ -185,25 +212,53 @@
             font-size: 11px;
         }
         th, td {
-            border: 1px solid #bdc3c7;
+            border-right: 1px solid #bdc3c7;
+            border-bottom: 1px solid #bdc3c7;
             padding: 3px 2px;
         }
         th:first-child, td:first-child {
+            border-left: 1px solid #bdc3c7;
+        }
+        thead th {
+            border-top: 1px solid #bdc3c7;
+        }
+        
+        /* Sticky Üst Başlıklar */
+        thead th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #ecf0f1;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        
+        /* Sticky Sol 1. ve 2. Sütun (S.No ve İsim) */
+        th:first-child, td:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+            background-color: #ecf0f1;
             width: 34px;
         }
         th:nth-child(2), td:nth-child(2) {
+            position: sticky;
+            left: 35px;
+            z-index: 11;
+            background-color: #e8cebe;
             width: 285px;
         }
-        th {
+        
+        /* En Sol-Üst Köşenin üstte kalması için z-index yüksekliği */
+        thead th:first-child, thead th:nth-child(2) {
+            z-index: 12;
             background-color: #ecf0f1;
-            font-weight: bold;
-            transition: background-color 0.2s, color 0.2s;
         }
+
         .personnel-name {
             text-align: left;
             padding: 3px 5px;
             white-space: nowrap;
-            background-color: #e8cebe;
             font-weight: 500;
             font-size: 11px;
             user-select: none;
@@ -212,12 +267,11 @@
         .weekend {
             background-color: #9ab3cf;
         }
-        
-        th.col-is-full, td.duty-cell.col-is-full {
-            background-color: #ffe0e0;
-        }
         th.weekend.col-is-full, td.duty-cell.weekend.col-is-full {
             background-color: #e3a8a8;
+        }
+        th.col-is-full, td.duty-cell.col-is-full {
+            background-color: #ffe0e0;
         }
 
         .duty-cell {
@@ -232,15 +286,14 @@
             box-shadow: inset 0 0 4px rgba(0,0,0,0.3);
         }
         
+        /* Hover Vurguları */
         .row-highlight td.duty-cell {
             background-color: #fdf5e6 !important;
         }
-        
         .row-highlight td.duty-cell.has-excuse {
             background-color: #fdf5e6 !important;
             color: #2f3640 !important; 
         }
-
         .name-highlight {
             background-color: #f1c40f !important;
             color: #2f3640 !important;
@@ -286,14 +339,20 @@
             font-size: 11px;
             font-weight: bold;
             padding: 4px 1px;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+        #dailyStatusRow td:first-child {
+            z-index: 12;
         }
         
         .day-empty {
-            background-color: #2ecc71; 
+            background-color: #2ecc71 !important; 
             color: white;
         }
         .day-full {
-            background-color: #e74c3c;
+            background-color: #e74c3c !important;
             color: white;
         }
 
@@ -325,30 +384,90 @@
         #ui-warning.success {
             background-color: #2ecc71;
         }
+
+        /* --- MOBİL EKRANLAR İÇİN DÜZENLEMELER --- */
+        @media (max-width: 768px) {
+            .header-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+                gap: 15px 10px;
+                max-width: 100%;
+            }
+            .title-wrapper {
+                grid-column: 1 / -1;
+                grid-row: 1;
+            }
+            .btn-prev {
+                position: static;
+                grid-column: 1;
+                grid-row: 2;
+                justify-self: stretch;
+            }
+            .btn-next {
+                position: static;
+                grid-column: 2;
+                grid-row: 2;
+                justify-self: stretch;
+            }
+            .btn-nav {
+                padding: 12px;
+                font-size: 14px;
+                text-align: center;
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .controls-left, .controls-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            /* FIRÇA BUTONU MOBİLDE GÖSTERİLİR */
+            .btn-brush {
+                display: block;
+                width: 100%;
+                padding: 10px;
+            }
+            
+            .controls-right button {
+                flex: 1;
+                padding: 10px;
+                font-size: 11px;
+            }
+        }
     </style>
 </head>
 <body>
 
     <div class="header-container">
-        <button class="btn-nav" onclick="changeMonth(-1)">&#9664; Önceki Ay</button>
+        <button class="btn-nav btn-prev" onclick="changeMonth(-1)">&#9664; Önceki Ay</button>
         <div class="title-wrapper">
             <h2 id="monthTitle">YÜKLENİYOR...</h2>
             <button id="btnToday" class="btn-today" onclick="goToCurrentMonth()">Şimdiki Aya Dön</button>
         </div>
-        <button class="btn-nav" onclick="changeMonth(1)">Sonraki Ay &#9654;</button>
+        <button class="btn-nav btn-next" onclick="changeMonth(1)">Sonraki Ay &#9654;</button>
     </div>
 
     <div class="info-text">
-        ℹ️ <b>İpucu:</b> Hücreye <b>sol tıklayarak</b> Nöbet (1) / Oryantasyon (O) atayabilirsiniz. Personeli İzinli/Mazeretli (X) yapmak veya durumu kaldırmak için hücreye <b>sağ tıklayın</b> (Mobilde <b>basılı tutun</b>).
+        ℹ️ <b>İpucu:</b> Hücreye <b>sol tıklayarak</b> Nöbet (1)/Oryantasyon (O) atayabilirsiniz. İzin (X) atamak için bilgisayarda <b>sağ tıkla basılı tutarak sürükleyebilir</b> veya mobilde aşağıdaki fırçayı açabilirsiniz.
     </div>
 
     <div class="controls">
-        <label for="dayInput">Gün Durumu Sorgula:</label>
-        <input type="number" id="dayInput" min="1" placeholder="Gün">
-        <button onclick="checkDayStatus()">Sorgula</button>
-        <span id="result"></span>
+        <div class="controls-left">
+            <button id="toggleBrushBtn" class="btn-brush" onclick="toggleBrushMode()">🖍️ Mazeret (X) Fırçası: KAPALI</button>
+            <label for="dayInput">Sorgula:</label>
+            <input type="number" id="dayInput" min="1" placeholder="Gün">
+            <button onclick="checkDayStatus()">Ara</button>
+            <span id="result"></span>
+        </div>
         
-        <div class="button-group">
+        <div class="controls-right button-group">
             <button class="btn-auto-senior" onclick="autoAssignDuties('seniority')">Kıdeme Göre Dağıt ⭐</button>
             <button class="btn-auto" onclick="autoAssignDuties('equal')">Eşit Dağıt ⚖️</button>
             <button class="btn-danger" onclick="clearCurrentMonthDuties()">Tümünü Temizle (Bu Ay)</button>
@@ -378,6 +497,15 @@
         let currentMonth = currentDate.getMonth(); 
         let daysInMonth = 31;
         let monthKey = "";
+
+        // Paint/Drag özellikleri için Global Değişkenler
+        let isRightMouseDown = false;
+        let isRemovingX = false;
+        
+        // Touch/Mobil Fırça için değişkenler
+        let isBrushModeActive = false;
+        let isTouchDragging = false;
+        let touchRemovingX = false;
 
         const monthNames = ["OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"];
         const dayNames = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"];
@@ -409,44 +537,30 @@
         }
 
         function escapeHtml(value) {
-            const entityMap = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
+            const entityMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
             return String(value).replace(/[&<>"']/g, char => entityMap[char]);
         }
 
         function normalizePersonnelData(data) {
-            if (!Array.isArray(data)) {
-                return cloneDefaultPersonnelData();
-            }
-
+            if (!Array.isArray(data)) return cloneDefaultPersonnelData();
             const usedIds = new Set();
             let nextId = 1;
             const normalized = [];
 
             data.forEach(item => {
-                if (!item || typeof item !== 'object' || typeof item.name !== 'string' || !item.name.trim()) {
-                    return;
-                }
-
+                if (!item || typeof item !== 'object' || typeof item.name !== 'string' || !item.name.trim()) return;
                 let id = parseInt(item.id, 10);
                 if (!Number.isSafeInteger(id) || id < 1 || usedIds.has(id)) {
                     while (usedIds.has(nextId)) nextId++;
                     id = nextId;
                 }
                 usedIds.add(id);
-
                 normalized.push({
                     id: id,
                     name: item.name.trim(),
                     duties: item.duties && typeof item.duties === 'object' && !Array.isArray(item.duties) ? item.duties : {}
                 });
             });
-
             return normalized.length > 0 ? normalized : cloneDefaultPersonnelData();
         }
 
@@ -463,6 +577,19 @@
             warningTimeout = setTimeout(function() {
                 warningBox.className = warningBox.className.replace("show", "").replace("success", "").trim();
             }, 3500); 
+        }
+
+        function toggleBrushMode() {
+            isBrushModeActive = !isBrushModeActive;
+            const btn = document.getElementById('toggleBrushBtn');
+            if (isBrushModeActive) {
+                btn.innerHTML = '🖍️ Mazeret (X) Fırçası: <b style="color:#2ecc71">AÇIK</b>';
+                btn.classList.add('active');
+                showWarning("Fırça Modu AÇIK. Tabloya dokunup sürükleyerek hızlıca X ekleyip silebilirsiniz.", "success");
+            } else {
+                btn.innerHTML = '🖍️ Mazeret (X) Fırçası: KAPALI';
+                btn.classList.remove('active');
+            }
         }
 
         function sortPersonnelList() {
@@ -490,7 +617,6 @@
             } catch (error) {
                 personnelData = cloneDefaultPersonnelData();
                 localStorage.removeItem(storageKey);
-                showWarning("⚠️ Kayıtlı veri okunamadı; varsayılan liste yüklendi.");
             }
             sortPersonnelList(); 
         }
@@ -498,9 +624,7 @@
         function saveToStorage() {
             try {
                 localStorage.setItem(storageKey, JSON.stringify(personnelData));
-            } catch (error) {
-                showWarning("⚠️ Değişiklikler tarayıcı kayıt alanına yazılamadı.");
-            }
+            } catch (error) {}
         }
 
         function changeMonth(offset) {
@@ -522,6 +646,44 @@
             initTable();
         }
 
+        function applyX(td, personObj, day, isWeekend) {
+            if (!personObj.duties[monthKey]) personObj.duties[monthKey] = {};
+            if (personObj.duties[monthKey][day] === 'X') return;
+
+            let excusedCount = 0;
+            for (let p of personnelData) {
+                if (p.duties[monthKey] && p.duties[monthKey][day] === 'X') {
+                    excusedCount++;
+                }
+            }
+            if (excusedCount >= personnelData.length - 1) {
+                if(!td.dataset.warned) {
+                    showWarning(`⚠️ ${day} ${monthNames[currentMonth]} tarihinde tüm personeller mazeretli olamaz! En az 1 kişi kalmalıdır.`);
+                    td.dataset.warned = "true";
+                    setTimeout(() => delete td.dataset.warned, 2000); 
+                }
+                return;
+            }
+
+            td.textContent = 'X';
+            td.className = 'duty-cell has-excuse' + (isWeekend ? ' weekend' : '') + (td.classList.contains('col-is-full') ? ' col-is-full' : '');
+            personObj.duties[monthKey][day] = 'X';
+            updateTotal(td.parentElement, personObj);
+            updateDailyStatus();
+            saveToStorage();
+        }
+
+        function removeX(td, personObj, day, isWeekend) {
+            if (personObj.duties[monthKey] && personObj.duties[monthKey][day] === 'X') {
+                td.textContent = '';
+                td.className = 'duty-cell' + (isWeekend ? ' weekend' : '') + (td.classList.contains('col-is-full') ? ' col-is-full' : '');
+                delete personObj.duties[monthKey][day];
+                updateTotal(td.parentElement, personObj);
+                updateDailyStatus();
+                saveToStorage();
+            }
+        }
+
         function initTable() {
             loadData();
             daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -529,22 +691,24 @@
             document.getElementById('monthTitle').textContent = `${monthNames[currentMonth]} ${currentYear} KARARGAH GİRİŞ NÖBET ÇİZELGESİ`;
             document.getElementById('dayInput').max = daysInMonth;
             document.getElementById('result').textContent = '';
-            const now = new Date();
+            
             const btnToday = document.getElementById('btnToday');
-            if (currentYear === now.getFullYear() && currentMonth === now.getMonth()) {
+            if (currentYear === new Date().getFullYear() && currentMonth === new Date().getMonth()) {
                 btnToday.style.visibility = 'hidden';
                 btnToday.style.pointerEvents = 'none';
             } else {
                 btnToday.style.visibility = 'visible';
                 btnToday.style.pointerEvents = 'auto';
             }
+
             const daysRow = document.getElementById('daysRow');
             const tableBody = document.getElementById('tableBody');
             daysRow.innerHTML = '';
             tableBody.innerHTML = '';
+            
             daysRow.innerHTML = `
                 <th>S. NO</th>
-                <th>
+                <th style="z-index: 12;">
                     <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 0 4px;">
                         <span>Rütbe / İsim</span>
                         <button class="btn-add-text" onclick="addPersonnel()" title="Personel Ekle">Personel Ekle</button>
@@ -572,6 +736,7 @@
             thTotal.textContent = "Top.";
             thTotal.className = 'total-col';
             daysRow.appendChild(thTotal);
+
             personnelData.forEach((person, index) => {
                 if (!person.duties[monthKey]) person.duties[monthKey] = {};
                 const tr = document.createElement('tr');
@@ -595,9 +760,15 @@
                     const dateObj = new Date(currentYear, currentMonth, i);
                     const dayOfWeek = dateObj.getDay();
                     const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                    
                     const td = document.createElement('td');
                     td.className = 'duty-cell';
                     if (isWeekend) td.classList.add('weekend');
+                    
+                    td.dataset.pid = person.id;
+                    td.dataset.day = i;
+                    td.dataset.isWeekend = isWeekend;
+
                     const cellDuty = person.duties[monthKey][i];
                     if (cellDuty === '1') {
                         td.textContent = '1';
@@ -610,90 +781,82 @@
                         td.classList.add('has-excuse');
                     }
                     
-                    td.onmouseenter = function() {
+                    td.onmouseenter = function(e) {
                         tr.classList.add('row-highlight');
                         tr.children[1].classList.add('name-highlight');
-                        daysRow.children[i + 1].classList.add('col-highlight');
+                        if (daysRow.children[i + 1]) daysRow.children[i + 1].classList.add('col-highlight');
+
+                        if (isRightMouseDown) {
+                            if (isRemovingX) {
+                                removeX(this, person, i, isWeekend);
+                            } else {
+                                applyX(this, person, i, isWeekend);
+                            }
+                        }
                     };
+                    
                     td.onmouseleave = function() {
                         tr.classList.remove('row-highlight');
                         tr.children[1].classList.remove('name-highlight');
-                        daysRow.children[i + 1].classList.remove('col-highlight');
+                        if (daysRow.children[i + 1]) daysRow.children[i + 1].classList.remove('col-highlight');
                     };
 
-                    td.onclick = function() {
-                        if (person.duties[monthKey][i] === 'X') {
-                            showWarning(`⚠️ ${escapeHtml(person.name)} bu gün <b>izinli/mazeretli</b>.<br>Kaldırmak için sağ tıklayın.`);
-                            return;
-                        }
-                        if (this.textContent === '') {
-                            let prevDuty = person.duties[monthKey][i - 1];
-                            let nextDuty = person.duties[monthKey][i + 1];
-                            
-                            let existingDuty = personnelData.find(p => p.id !== person.id && p.duties[monthKey] && p.duties[monthKey][i] === '1');
-                            let assigning = existingDuty ? 'O' : '1';
-
-                            if (assigning === '1' && (prevDuty === '1' || nextDuty === '1')) {
-                                showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde nöbet (1) yazılamaz!`);
+                    td.onmousedown = function(e) {
+                        if (e.button === 0 && !isBrushModeActive) { 
+                            if (person.duties[monthKey][i] === 'X') {
+                                showWarning(`⚠️ ${escapeHtml(person.name)} bu gün <b>izinli/mazeretli</b>.<br>Kaldırmak için sağ tıklayın.`);
                                 return;
                             }
-                            if (assigning === 'O' && (prevDuty === 'O' || nextDuty === 'O')) {
-                                showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde oryantasyon (O) yazılamaz!`);
-                                return;
-                            }
+                            if (this.textContent === '') {
+                                let prevDuty = person.duties[monthKey][i - 1];
+                                let nextDuty = person.duties[monthKey][i + 1];
+                                
+                                let existingDuty = personnelData.find(p => p.id !== person.id && p.duties[monthKey] && p.duties[monthKey][i] === '1');
+                                let assigning = existingDuty ? 'O' : '1';
 
-                            if (existingDuty) {
+                                if (assigning === '1' && (prevDuty === '1' || nextDuty === '1')) {
+                                    showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde nöbet (1) yazılamaz!`);
+                                    return;
+                                }
+                                if (assigning === 'O' && (prevDuty === 'O' || nextDuty === 'O')) {
+                                    showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde oryantasyon (O) yazılamaz!`);
+                                    return;
+                                }
+
+                                if (existingDuty) {
+                                    this.textContent = 'O';
+                                    this.className = 'duty-cell has-orientation' + (isWeekend ? ' weekend' : '') + (td.classList.contains('col-is-full') ? ' col-is-full' : '');
+                                    person.duties[monthKey][i] = 'O';
+                                } else {
+                                    this.textContent = '1';
+                                    this.className = 'duty-cell has-duty' + (isWeekend ? ' weekend' : '') + (td.classList.contains('col-is-full') ? ' col-is-full' : '');
+                                    person.duties[monthKey][i] = '1';
+                                }
+                            } else if (this.textContent === '1') {
                                 this.textContent = 'O';
-                                this.className = 'duty-cell has-orientation' + (isWeekend ? ' weekend' : '');
+                                this.className = 'duty-cell has-orientation' + (isWeekend ? ' weekend' : '') + (td.classList.contains('col-is-full') ? ' col-is-full' : '');
                                 person.duties[monthKey][i] = 'O';
                             } else {
-                                this.textContent = '1';
-                                this.className = 'duty-cell has-duty' + (isWeekend ? ' weekend' : '');
-                                person.duties[monthKey][i] = '1';
+                                this.textContent = '';
+                                this.className = 'duty-cell' + (isWeekend ? ' weekend' : '') + (td.classList.contains('col-is-full') ? ' col-is-full' : '');
+                                delete person.duties[monthKey][i];
                             }
-                        } else if (this.textContent === '1') {
-                            this.textContent = 'O';
-                            this.className = 'duty-cell has-orientation' + (isWeekend ? ' weekend' : '');
-                            person.duties[monthKey][i] = 'O';
-                        } else {
-                            this.textContent = '';
-                            this.className = 'duty-cell' + (isWeekend ? ' weekend' : '');
-                            delete person.duties[monthKey][i];
+                            updateTotal(tr, person);
+                            updateDailyStatus();
+                            saveToStorage();
                         }
-                        updateTotal(tr, person);
-                        updateDailyStatus();
-                        saveToStorage();
+                        else if (e.button === 2) {
+                            isRightMouseDown = true;
+                            if (person.duties[monthKey] && person.duties[monthKey][i] === 'X') {
+                                isRemovingX = true;
+                                removeX(this, person, i, isWeekend);
+                            } else {
+                                isRemovingX = false;
+                                applyX(this, person, i, isWeekend);
+                            }
+                        }
                     };
-                    
-                    td.oncontextmenu = function(e) {
-                        e.preventDefault(); 
-                        if (person.duties[monthKey][i] === 'X') {
-                            this.textContent = '';
-                            this.className = 'duty-cell' + (isWeekend ? ' weekend' : '');
-                            delete person.duties[monthKey][i];
-                        } else {
-                            // TAMAMI MAZERETLİ OLAMAZ KONTROLÜ
-                            let excusedCount = 0;
-                            for (let p of personnelData) {
-                                if (p.duties[monthKey] && p.duties[monthKey][i] === 'X') {
-                                    excusedCount++;
-                                }
-                            }
-                            
-                            // Eğer bu kişiyi de X yaparsak tüm liste X olmuş olacak
-                            if (excusedCount >= personnelData.length - 1) {
-                                showWarning(`⚠️ ${i} ${monthNames[currentMonth]} tarihinde tüm personeller mazeretli olamaz! En az 1 kişi kalmalıdır.`);
-                                return; 
-                            }
 
-                            this.textContent = 'X';
-                            this.className = 'duty-cell has-excuse' + (isWeekend ? ' weekend' : '');
-                            person.duties[monthKey][i] = 'X';
-                        }
-                        updateTotal(tr, person);
-                        updateDailyStatus();
-                        saveToStorage();
-                    };
                     tr.appendChild(td);
                 }
                 const tdTotal = document.createElement('td');
@@ -713,7 +876,7 @@
 
         function updateDailyStatus() {
             const statusRow = document.getElementById('dailyStatusRow');
-            statusRow.innerHTML = '<td colspan="2" style="text-align:right; font-size:11px; padding-right:10px;">GÜN DURUMU :</td>';
+            statusRow.innerHTML = '<td colspan="2" style="text-align:right; font-size:11px;">GÜN DURUMU:</td>';
             
             const daysRow = document.getElementById('daysRow');
             const tableBody = document.getElementById('tableBody');
@@ -893,11 +1056,18 @@
                     if (p.duties[monthKey][day] === 'X') continue;
                     let prevDay = p.duties[monthKey][day - 1];
                     let nextDay = p.duties[monthKey][day + 1];
-                    if (prevDay === '1' || nextDay === '1') continue;
+                    if ((prevDay === '1' || prevDay === 'O') || (nextDay === '1' || nextDay === 'O')) continue;
                     
                     let actualCount = Object.values(p.duties[monthKey]).filter(val => val === '1' || val === 'O').length;
                     let term = getPersonnelTerm(p);
                     let dayTermPriority = getDayTermPriority(dayOfWeek, term);
+                    
+                    let remainingDays = 0;
+                    for (let d = day; d <= daysInMonth; d++) {
+                        if (p.duties[monthKey][d] !== 'X') {
+                            remainingDays++;
+                        }
+                    }
                     
                     if (mode === 'seniority') {
                         let targetCount = targetCounts[p.id] || 1;
@@ -907,7 +1077,8 @@
                             actualCount: actualCount,
                             targetCount: targetCount,
                             effectiveCount: actualCount / targetCount,
-                            dayTermPriority: dayTermPriority
+                            dayTermPriority: dayTermPriority,
+                            remainingDays: remainingDays
                         });
                     } else {
                         eligiblePersonnel.push({
@@ -915,7 +1086,8 @@
                             actualCount: actualCount,
                             targetCount: 0,
                             effectiveCount: actualCount,
-                            dayTermPriority: dayTermPriority
+                            dayTermPriority: dayTermPriority,
+                            remainingDays: remainingDays
                         });
                     }
                 }
@@ -925,8 +1097,11 @@
                         let minCount = Math.min(...eligiblePersonnel.map(e => e.actualCount));
                         let tiedPersonnel = eligiblePersonnel.filter(e => e.actualCount === minCount);
                         
-                        let maxTerm = Math.max(...tiedPersonnel.map(e => getPersonnelTerm(e.person)));
-                        let mostJuniorPersonnel = tiedPersonnel.filter(e => getPersonnelTerm(e.person) === maxTerm);
+                        let minRemaining = Math.min(...tiedPersonnel.map(e => e.remainingDays));
+                        let criticalPersonnel = tiedPersonnel.filter(e => e.remainingDays === minRemaining);
+                        
+                        let maxTerm = Math.max(...criticalPersonnel.map(e => getPersonnelTerm(e.person)));
+                        let mostJuniorPersonnel = criticalPersonnel.filter(e => getPersonnelTerm(e.person) === maxTerm);
                         
                         let randomIndex = Math.floor(Math.random() * mostJuniorPersonnel.length);
                         let selectedPerson = mostJuniorPersonnel[randomIndex].person;
@@ -935,10 +1110,21 @@
                         changesMade = true;
                     } else {
                         eligiblePersonnel.sort((a, b) => {
-                            if (priorityDutyDay && a.dayTermPriority !== b.dayTermPriority) return a.dayTermPriority - b.dayTermPriority;
-                            if (a.effectiveCount !== b.effectiveCount) return a.effectiveCount - b.effectiveCount;
-                            if (a.actualCount !== b.actualCount) return a.actualCount - b.actualCount;
-                            if (a.targetCount !== b.targetCount) return b.targetCount - a.targetCount;
+                            if (priorityDutyDay && a.dayTermPriority !== b.dayTermPriority) {
+                                return a.dayTermPriority - b.dayTermPriority;
+                            }
+                            if (a.effectiveCount !== b.effectiveCount) {
+                                return a.effectiveCount - b.effectiveCount;
+                            }
+                            if (a.actualCount !== b.actualCount) {
+                                return a.actualCount - b.actualCount;
+                            }
+                            if (a.targetCount !== b.targetCount) {
+                                return b.targetCount - a.targetCount;
+                            }
+                            if (a.remainingDays !== b.remainingDays) {
+                                return a.remainingDays - b.remainingDays;
+                            }
                             return a.person.id - b.person.id;
                         });
                         let selectedPerson = eligiblePersonnel[0].person;
@@ -963,7 +1149,72 @@
             }
         }
 
-        window.onload = initTable;
+        // Global Event Listener'lar
+        window.onload = function() {
+            initTable();
+
+            document.addEventListener('mouseup', function(e) {
+                if (e.button === 2) isRightMouseDown = false;
+            });
+            
+            const dutyTable = document.getElementById('dutyTable');
+            const tableBody = document.getElementById('tableBody');
+
+            dutyTable.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+
+            tableBody.addEventListener('touchstart', function(e) {
+                if (isBrushModeActive && e.touches.length === 1) {
+                    let touch = e.touches[0];
+                    let elem = document.elementFromPoint(touch.clientX, touch.clientY);
+                    if (elem && elem.classList.contains('duty-cell') && !elem.classList.contains('inactive-day')) {
+                        isTouchDragging = true;
+                        e.preventDefault(); 
+                        
+                        let pid = parseInt(elem.dataset.pid);
+                        let day = parseInt(elem.dataset.day);
+                        let personObj = personnelData.find(p => p.id === pid);
+                        let isWeekend = elem.dataset.isWeekend === "true";
+
+                        if (personObj.duties[monthKey] && personObj.duties[monthKey][day] === 'X') {
+                            touchRemovingX = true;
+                            removeX(elem, personObj, day, isWeekend);
+                        } else {
+                            touchRemovingX = false;
+                            applyX(elem, personObj, day, isWeekend);
+                        }
+                    }
+                }
+            }, { passive: false });
+
+            tableBody.addEventListener('touchmove', function(e) {
+                if (isBrushModeActive && isTouchDragging && e.touches.length === 1) {
+                    e.preventDefault(); 
+                    let touch = e.touches[0];
+                    let elem = document.elementFromPoint(touch.clientX, touch.clientY);
+                    if (elem && elem.classList.contains('duty-cell') && !elem.classList.contains('inactive-day')) {
+                        let pid = parseInt(elem.dataset.pid);
+                        let day = parseInt(elem.dataset.day);
+                        let personObj = personnelData.find(p => p.id === pid);
+                        let isWeekend = elem.dataset.isWeekend === "true";
+
+                        if (touchRemovingX) {
+                            removeX(elem, personObj, day, isWeekend);
+                        } else {
+                            applyX(elem, personObj, day, isWeekend);
+                        }
+                    }
+                }
+            }, { passive: false });
+
+            tableBody.addEventListener('touchend', function(e) {
+                isTouchDragging = false;
+            });
+            tableBody.addEventListener('touchcancel', function(e) {
+                isTouchDragging = false;
+            });
+        };
     </script>
 </body>
 </html>
