@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompakt Nöbet Çizelgesi Playground</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 10px;
+            background-color: #f5f6fa;
+            color: #2f3640;
+        }
+        .header-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0 20px 0;
+        }
+        .title-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            min-width: 380px;
+        }
+        .title-wrapper h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #353b48;
+            text-align: center;
+        }
+        .btn-today {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .btn-today:hover {
+            background-color: #7f8c8d;
+        }
+        .btn-nav {
+            background-color: #34495e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        .btn-nav:hover {
+            background-color: #2c3e50;
+        }
+        .info-text {
+            background-color: #dff9fb;
+            color: #130f40;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #686de0;
+        }
+        .controls {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+        input[type="number"] {
+            padding: 6px;
+            width: 60px;
+            border: 1px solid #dcdde1;
+            border-radius: 4px;
+        }
+        button {
+            padding: 6px 12px;
+            background-color: #0097e6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        button:hover {
+            background-color: #00a8ff;
+        }
+        .button-group {
+            margin-left: auto; 
+            display: flex;
+            gap: 8px;
+        }
+        .btn-danger {
+            background-color: #c23616;
+        }
+        .btn-danger:hover {
+            background-color: #e84118;
+        }
+        .btn-auto {
+            background-color: #8e44ad;
+        }
+        .btn-auto:hover {
+            background-color: #9b59b6;
+        }
+        .btn-auto-senior {
+            background-color: #d35400; 
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .btn-auto-senior:hover {
+            background-color: #e67e22;
+        }
+        .btn-add-text {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+        .btn-add-text:hover {
+            background-color: #2ecc71;
+        }
+        .btn-icon-danger {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 5px;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-icon-danger:hover {
+            background-color: #c0392b;
+        }
+        .personnel-cell-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
+        }
+        #result {
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .table-container {
+            overflow-x: auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding-bottom: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            table-layout: fixed;
+            min-width: 1020px;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+        }
+        th, td {
+            border: 1px solid #bdc3c7;
+            padding: 3px 2px;
+        }
+        th:first-child, td:first-child {
+            width: 34px;
+        }
+        th:nth-child(2), td:nth-child(2) {
+            width: 285px;
+        }
+        th {
+            background-color: #ecf0f1;
+            font-weight: bold;
+        }
+        .personnel-name {
+            text-align: left;
+            padding: 3px 5px;
+            white-space: nowrap;
+            background-color: #e8cebe;
+            font-weight: 500;
+            font-size: 11px;
+            user-select: none;
+        }
+        .weekend {
+            background-color: #9ab3cf;
+        }
+        .duty-cell {
+            cursor: pointer;
+            height: 18px;
+            transition: background-color 0.2s;
+            user-select: none;
+        }
+        .duty-cell:hover {
+            background-color: #f1c40f !important;
+            color: #2f3640 !important;
+        }
+        .has-duty {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .has-orientation {
+            font-weight: bold;
+            color: #d35400;
+        }
+        .has-excuse {
+            background-color: #c0392b !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        .total-col {
+            background-color: #ecf0f1;
+            font-weight: bold;
+            font-size: 12px;
+            width: 36px;
+        }
+        .inactive-day {
+            background-color: #f4f6f8 !important;
+            color: transparent !important;
+            cursor: default;
+        }
+        .inactive-day:hover {
+            background-color: #f4f6f8 !important;
+        }
+        #dailyStatusRow td {
+            font-size: 11px;
+            font-weight: bold;
+            padding: 4px 1px;
+        }
+        .day-empty {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .day-full {
+            background-color: #2ecc71;
+            color: white;
+        }
+        #ui-warning {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #e74c3c;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 12px 20px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+            font-size: 13px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            pointer-events: none;
+        }
+        #ui-warning.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 40px;
+        }
+        #ui-warning.success {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <button class="btn-nav" onclick="changeMonth(-1)">&#9664; Önceki Ay</button>
+        <div class="title-wrapper">
+            <h2 id="monthTitle">YÜKLENİYOR...</h2>
+            <button id="btnToday" class="btn-today" onclick="goToCurrentMonth()">Şimdiki Aya Dön</button>
+        </div>
+        <button class="btn-nav" onclick="changeMonth(1)">Sonraki Ay &#9654;</button>
+    </div>
+
+    <div class="info-text">
+        ℹ️ <b>İpucu:</b> Hücreye <b>sol tıklayarak</b> Nöbet (1) / Oryantasyon (O) atayabilirsiniz. Personeli İzinli/Mazeretli (X) yapmak veya durumu kaldırmak için hücreye <b>sağ tıklayın</b> (Mobilde <b>basılı tutun</b>).
+    </div>
+
+    <div class="controls">
+        <label for="dayInput">Gün Durumu Sorgula:</label>
+        <input type="number" id="dayInput" min="1" placeholder="Gün">
+        <button onclick="checkDayStatus()">Sorgula</button>
+        <span id="result"></span>
+        
+        <div class="button-group">
+            <button class="btn-auto-senior" onclick="autoAssignDuties('seniority')">Kıdeme Göre Dağıt</button>
+            <button class="btn-auto" onclick="autoAssignDuties('equal')">Eşit Dağıt</button>
+            <button class="btn-danger" onclick="clearCurrentMonthDuties()">Tümünü Temizle (Bu Ay)</button>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table id="dutyTable">
+            <thead>
+                <tr id="daysRow">
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+            <tfoot>
+                <tr id="dailyStatusRow">
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div id="ui-warning"></div>
+
+    <script>
+        let currentDate = new Date();
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth(); 
+        let daysInMonth = 31;
+        let monthKey = "";
+
+        const monthNames = ["OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS", "EYLÜL", "EKİM", "KASIM", "ARALIK"];
+        const dayNames = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"];
+
+        const defaultPersonnelData = [
+            { id: 1, name: "Sağ. Tğm. Nevzat Erdem KURŞUNCU [400]", duties: {} },
+            { id: 2, name: "Topçu Tğm. Mehmet Ali ESER [400]", duties: {} },
+            { id: 3, name: "Topçu Tğm. Cihan ÖZCAN [400]", duties: {} },
+            { id: 4, name: "Topçu Atğm. Sırrı Can YÜCEL [401]", duties: {} },
+            { id: 5, name: "Sağ. Atğm. Oğuzhan DOĞAN [401]", duties: {} },
+            { id: 6, name: "Topçu Atğm. Ahmet Atakan ÖMEG [401]", duties: {} },
+            { id: 7, name: "Topçu Atğm. Lokman AYDIN [401]", duties: {} },
+            { id: 8, name: "Topçu Atğm. Buğra AKŞEHİRLİOĞLU [401]", duties: {} },
+            { id: 9, name: "Topçu Atğm. Batuhan ÇAĞLAN [401]", duties: {} },
+            { id: 10, name: "Topçu Atğm. Vural ARSLAN [402]", duties: {} },
+            { id: 11, name: "P.Atğm. Bahri ÇETİN [402]", duties: {} },
+            { id: 12, name: "Topçu Atğm. Ege SAĞIR [403]", duties: {} },
+            { id: 13, name: "Topçu Atğm. Yunus ÖZKUL [403]", duties: {} },
+            { id: 14, name: "Topçu Atğm. Metehan AKKOÇ [403]", duties: {} },
+            { id: 15, name: "Mu.Asb.Açvş. Ahmet Burak DURMAZ [400]", duties: {} }
+        ];
+
+        let personnelData = [];
+        const storageKey = 'karargah_nobet_dinamik_v7';
+        let warningTimeout;
+
+        function cloneDefaultPersonnelData() {
+            return JSON.parse(JSON.stringify(defaultPersonnelData));
+        }
+
+        function escapeHtml(value) {
+            const entityMap = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return String(value).replace(/[&<>"']/g, char => entityMap[char]);
+        }
+
+        function normalizePersonnelData(data) {
+            if (!Array.isArray(data)) {
+                return cloneDefaultPersonnelData();
+            }
+
+            const usedIds = new Set();
+            let nextId = 1;
+            const normalized = [];
+
+            data.forEach(item => {
+                if (!item || typeof item !== 'object' || typeof item.name !== 'string' || !item.name.trim()) {
+                    return;
+                }
+
+                let id = parseInt(item.id, 10);
+                if (!Number.isSafeInteger(id) || id < 1 || usedIds.has(id)) {
+                    while (usedIds.has(nextId)) nextId++;
+                    id = nextId;
+                }
+                usedIds.add(id);
+
+                normalized.push({
+                    id: id,
+                    name: item.name.trim(),
+                    duties: item.duties && typeof item.duties === 'object' && !Array.isArray(item.duties) ? item.duties : {}
+                });
+            });
+
+            return normalized.length > 0 ? normalized : cloneDefaultPersonnelData();
+        }
+
+        function showWarning(msg, type = "error") {
+            const warningBox = document.getElementById("ui-warning");
+            if (!warningBox) return;
+            warningBox.innerHTML = msg;
+            if (type === "success") {
+                warningBox.className = "show success";
+            } else {
+                warningBox.className = "show";
+            }
+            clearTimeout(warningTimeout);
+            warningTimeout = setTimeout(function() {
+                warningBox.className = warningBox.className.replace("show", "").replace("success", "").trim();
+            }, 3500); 
+        }
+
+        function sortPersonnelList() {
+            personnelData.sort((a, b) => {
+                let nameA = a.name.toUpperCase();
+                let nameB = b.name.toUpperCase();
+                let isOfficerA = nameA.includes("TĞM.") || nameA.includes("ATĞM.");
+                let isOfficerB = nameB.includes("TĞM.") || nameB.includes("ATĞM.");
+                let groupA = isOfficerA ? 1 : 2;
+                let groupB = isOfficerB ? 1 : 2;
+                if (groupA !== groupB) return groupA - groupB; 
+                let matchA = a.name.match(/\[(\d+)\]/);
+                let matchB = b.name.match(/\[(\d+)\]/);
+                let termA = matchA ? parseInt(matchA[1], 10) : 9999;
+                let termB = matchB ? parseInt(matchB[1], 10) : 9999;
+                if (termA !== termB) return termA - termB;
+                return nameA.localeCompare(nameB);
+            });
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem(storageKey);
+            try {
+                personnelData = saved ? normalizePersonnelData(JSON.parse(saved)) : cloneDefaultPersonnelData();
+            } catch (error) {
+                personnelData = cloneDefaultPersonnelData();
+                localStorage.removeItem(storageKey);
+                showWarning("⚠️ Kayıtlı veri okunamadı; varsayılan liste yüklendi.");
+            }
+            sortPersonnelList(); 
+        }
+
+        function saveToStorage() {
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(personnelData));
+            } catch (error) {
+                showWarning("⚠️ Değişiklikler tarayıcı kayıt alanına yazılamadı.");
+            }
+        }
+
+        function changeMonth(offset) {
+            currentMonth += offset;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            initTable();
+        }
+
+        function goToCurrentMonth() {
+            const now = new Date();
+            currentYear = now.getFullYear();
+            currentMonth = now.getMonth();
+            initTable();
+        }
+
+        function initTable() {
+            loadData();
+            daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            monthKey = `${currentYear}-${currentMonth}`;
+            document.getElementById('monthTitle').textContent = `${monthNames[currentMonth]} ${currentYear} KARARGAH GİRİŞ NÖBET ÇİZELGESİ`;
+            document.getElementById('dayInput').max = daysInMonth;
+            document.getElementById('result').textContent = '';
+            const now = new Date();
+            const btnToday = document.getElementById('btnToday');
+            if (currentYear === now.getFullYear() && currentMonth === now.getMonth()) {
+                btnToday.style.visibility = 'hidden';
+                btnToday.style.pointerEvents = 'none';
+            } else {
+                btnToday.style.visibility = 'visible';
+                btnToday.style.pointerEvents = 'auto';
+            }
+            const daysRow = document.getElementById('daysRow');
+            const tableBody = document.getElementById('tableBody');
+            daysRow.innerHTML = '';
+            tableBody.innerHTML = '';
+            daysRow.innerHTML = `
+                <th>S. NO</th>
+                <th>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 0 4px;">
+                        <span>Rütbe / İsim</span>
+                        <button class="btn-add-text" onclick="addPersonnel()" title="Personel Ekle">Personel Ekle</button>
+                    </div>
+                </th>
+            `;
+            for (let i = 1; i <= 31; i++) {
+                const isInactiveDay = i > daysInMonth;
+                if (isInactiveDay) {
+                    const th = document.createElement('th');
+                    th.innerHTML = '&nbsp;<br><span style="font-weight:normal; font-size:9px;">&nbsp;</span>';
+                    th.classList.add('inactive-day');
+                    daysRow.appendChild(th);
+                    continue;
+                }
+                const dateObj = new Date(currentYear, currentMonth, i);
+                const dayOfWeek = dateObj.getDay();
+                const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                const th = document.createElement('th');
+                th.innerHTML = `${i}<br><span style="font-weight:normal; font-size:9px;">${dayNames[dayOfWeek]}</span>`;
+                if (isWeekend) th.classList.add('weekend');
+                daysRow.appendChild(th);
+            }
+            const thTotal = document.createElement('th');
+            thTotal.textContent = "Top.";
+            thTotal.className = 'total-col';
+            daysRow.appendChild(thTotal);
+            personnelData.forEach((person, index) => {
+                if (!person.duties[monthKey]) person.duties[monthKey] = {};
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td class="personnel-name">
+                        <div class="personnel-cell-content">
+                            <span>${escapeHtml(person.name)}</span>
+                            <button class="btn-icon-danger" onclick="removePersonnel(${person.id})" title="Personeli Sil">❌</button>
+                        </div>
+                    </td>
+                `;
+                for (let i = 1; i <= 31; i++) {
+                    const isInactiveDay = i > daysInMonth;
+                    if (isInactiveDay) {
+                        const td = document.createElement('td');
+                        td.className = 'duty-cell inactive-day';
+                        tr.appendChild(td);
+                        continue;
+                    }
+                    const dateObj = new Date(currentYear, currentMonth, i);
+                    const dayOfWeek = dateObj.getDay();
+                    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+                    const td = document.createElement('td');
+                    td.className = 'duty-cell';
+                    if (isWeekend) td.classList.add('weekend');
+                    const cellDuty = person.duties[monthKey][i];
+                    if (cellDuty === '1') {
+                        td.textContent = '1';
+                        td.classList.add('has-duty');
+                    } else if (cellDuty === 'O') {
+                        td.textContent = 'O';
+                        td.classList.add('has-orientation');
+                    } else if (cellDuty === 'X') {
+                        td.textContent = 'X';
+                        td.classList.add('has-excuse');
+                    }
+                    td.onclick = function() {
+                        if (person.duties[monthKey][i] === 'X') {
+                            showWarning(`⚠️ ${escapeHtml(person.name)} bu gün <b>izinli/mazeretli</b>.<br>Kaldırmak için sağ tıklayın.`);
+                            return;
+                        }
+                        if (this.textContent === '') {
+                            let prevDuty = person.duties[monthKey][i - 1];
+                            let nextDuty = person.duties[monthKey][i + 1];
+                            if ((prevDuty === '1' || prevDuty === 'O') || (nextDuty === '1' || nextDuty === 'O')) {
+                                showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde nöbet yazılamaz!`);
+                                return;
+                            }
+                            let existingDuty = personnelData.find(p => p.id !== person.id && p.duties[monthKey] && p.duties[monthKey][i] === '1');
+
+                            if (existingDuty) {
+                                this.textContent = 'O';
+                                this.className = 'duty-cell has-orientation' + (isWeekend ? ' weekend' : '');
+                                person.duties[monthKey][i] = 'O';
+                            } else {
+                                this.textContent = '1';
+                                this.className = 'duty-cell has-duty' + (isWeekend ? ' weekend' : '');
+                                person.duties[monthKey][i] = '1';
+                            }
+                        } else if (this.textContent === '1') {
+                            this.textContent = 'O';
+                            this.className = 'duty-cell has-orientation' + (isWeekend ? ' weekend' : '');
+                            person.duties[monthKey][i] = 'O';
+                        } else {
+                            this.textContent = '';
+                            this.className = 'duty-cell' + (isWeekend ? ' weekend' : '');
+                            delete person.duties[monthKey][i];
+                        }
+                        updateTotal(tr, person);
+                        updateDailyStatus();
+                        saveToStorage();
+                    };
+                    td.oncontextmenu = function(e) {
+                        e.preventDefault(); 
+                        if (person.duties[monthKey][i] === 'X') {
+                            this.textContent = '';
+                            this.className = 'duty-cell' + (isWeekend ? ' weekend' : '');
+                            delete person.duties[monthKey][i];
+                        } else {
+                            this.textContent = 'X';
+                            this.className = 'duty-cell has-excuse' + (isWeekend ? ' weekend' : '');
+                            person.duties[monthKey][i] = 'X';
+                        }
+                        updateTotal(tr, person);
+                        updateDailyStatus();
+                        saveToStorage();
+                    };
+                    tr.appendChild(td);
+                }
+                const tdTotal = document.createElement('td');
+                tdTotal.className = 'total-col';
+                tr.appendChild(tdTotal);
+                tableBody.appendChild(tr);
+                updateTotal(tr, person);
+            });
+            updateDailyStatus();
+        }
+
+        function updateTotal(tr, person) {
+            const totalCell = tr.querySelector('.total-col');
+            const total = Object.values(person.duties[monthKey] || {}).filter(val => val === '1' || val === 'O').length;
+            totalCell.textContent = total;
+        }
+
+        function updateDailyStatus() {
+            const statusRow = document.getElementById('dailyStatusRow');
+            statusRow.innerHTML = '<td colspan="2" style="text-align:right; font-size:11px;">GÜN DURUMU:</td>';
+            for (let i = 1; i <= 31; i++) {
+                if (i > daysInMonth) {
+                    const td = document.createElement('td');
+                    td.className = 'inactive-day';
+                    statusRow.appendChild(td);
+                    continue;
+                }
+                let hasAnyone = false;
+                for (let p of personnelData) {
+                    if (p.duties[monthKey] && (p.duties[monthKey][i] === '1' || p.duties[monthKey][i] === 'O')) {
+                        hasAnyone = true;
+                        break;
+                    }
+                }
+                const td = document.createElement('td');
+                if (hasAnyone) {
+                    td.textContent = 'D';
+                    td.className = 'day-full';
+                } else {
+                    td.textContent = 'B';
+                    td.className = 'day-empty';
+                }
+                statusRow.appendChild(td);
+            }
+            const totalStatusCell = document.createElement('td');
+            totalStatusCell.className = 'total-col';
+            statusRow.appendChild(totalStatusCell); 
+        }
+
+        function checkDayStatus() {
+            const day = parseInt(document.getElementById('dayInput').value);
+            const resultSpan = document.getElementById('result');
+            if (!day || day < 1 || day > daysInMonth) {
+                resultSpan.textContent = `Lütfen bu ay için 1-${daysInMonth} arası bir gün girin.`;
+                resultSpan.style.color = "#c23616";
+                return;
+            }
+            const onDuty1 = personnelData.filter(p => p.duties[monthKey] && p.duties[monthKey][day] === '1').map(p => p.name);
+            const onDutyO = personnelData.filter(p => p.duties[monthKey] && p.duties[monthKey][day] === 'O').map(p => p.name);
+            const onExcuse = personnelData.filter(p => p.duties[monthKey] && p.duties[monthKey][day] === 'X').map(p => p.name);
+            let text = "";
+            if (onDuty1.length === 0 && onDutyO.length === 0) {
+                text = `<span style="color:#e74c3c;">${day} ${monthNames[currentMonth]} tamamen BOŞ.</span> `;
+            } else {
+                text = `<span style="color:#2ecc71;">${day} ${monthNames[currentMonth]} DOLU.</span> `;
+                if (onDuty1.length > 0) text += `<b>Nöbetçi:</b> ${onDuty1.map(escapeHtml).join(', ')}. `;
+                if (onDutyO.length > 0) text += `<b>Oryantasyon:</b> ${onDutyO.map(escapeHtml).join(', ')}. `;
+            }
+            if (onExcuse.length > 0) {
+                text += `<br><span style="color:#7f8c8d; font-size:12px;"><b>İzinli/Mazeretli:</b> ${onExcuse.map(escapeHtml).join(', ')}</span>`;
+            }
+            resultSpan.innerHTML = text;
+        }
+
+        function addPersonnel() {
+            let nameStr = prompt("Eklenecek personelin rütbesini ve adını giriniz:");
+            if (!nameStr) return;
+            nameStr = nameStr.trim();
+            if (!nameStr) return;
+            
+            let upperName = nameStr.toUpperCase();
+            let hasValidRank = upperName.includes("TĞM.") || upperName.includes("ATĞM.") || upperName.includes("AÇVŞ.") || upperName.includes("ÇVŞ.");
+            
+            if (!hasValidRank) {
+                alert("Hata: Geçersiz rütbe.");
+                return;
+            }
+            
+            let termStr = prompt(`Personelin dönemini giriniz:`);
+            if (!termStr) return;
+            termStr = termStr.trim();
+            if (!/^\d+$/.test(termStr)) return;
+            
+            const finalName = `${nameStr} [${termStr}]`;
+            if (personnelData.some(p => p.name.toUpperCase() === finalName.toUpperCase())) {
+                alert("Hata: Bu personel zaten listede mevcut!");
+                return;
+            }
+            const newId = personnelData.length > 0 ? Math.max(...personnelData.map(p => p.id)) + 1 : 1;
+            personnelData.push({ id: newId, name: finalName, duties: {} });
+            sortPersonnelList(); 
+            saveToStorage();     
+            initTable();         
+        }
+
+        function removePersonnel(id) {
+            if (confirm("Bu personeli listeden tamamen çıkarmak istediğinize emin misiniz?")) {
+                personnelData = personnelData.filter(p => p.id !== id);
+                saveToStorage();
+                initTable();
+            }
+        }
+
+        function clearCurrentMonthDuties() {
+            if (confirm(`DİKKAT: ${monthNames[currentMonth]} ${currentYear} tablosundaki tüm nöbetleri ve mazeretleri temizlemek istediğinize emin misiniz?`)) {
+                personnelData.forEach(person => {
+                    if (person.duties[monthKey]) person.duties[monthKey] = {};
+                });
+                saveToStorage(); 
+                initTable(); 
+            }
+        }
+
+        function getPersonnelTerm(person) {
+            let match = person.name.match(/\[(\d+)\]/);
+            return match ? parseInt(match[1], 10) : 9999;
+        }
+
+        function getDayTermPriority(dayOfWeek, term) {
+            if (dayOfWeek === 4) return term;
+            if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) return -term;
+            return 0;
+        }
+
+        function isPriorityDutyDay(dayOfWeek) {
+            return dayOfWeek === 4 || dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
+        }
+
+        function autoAssignDuties(mode) {
+            let modeText = mode === 'seniority' ? "KIDEM SIRASINA GÖRE" : "EŞİT";
+            if (!confirm(`${monthNames[currentMonth]} ${currentYear} ayı için ${modeText} otomatik nöbet dağıtımı yapılacaktır. Sadece mevcut BOŞ günlere atama yapılacaktır. Onaylıyor musunuz?`)) {
+                return;
+            }
+
+            let changesMade = false;
+            let unassignedDays = [];
+            let targetCounts = {};
+
+            if (mode === 'seniority') {
+                let validTerms = personnelData.map(getPersonnelTerm).filter(term => term !== 9999).sort((a, b) => a - b);
+                let baseTerm = validTerms.length > 0 ? validTerms[0] : 400;
+
+                personnelData.forEach(p => {
+                    let term = getPersonnelTerm(p);
+                    targetCounts[p.id] = term === 9999 ? validTerms.length + 1 : Math.max(1, term - baseTerm + 1);
+                });
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayOfWeek = new Date(currentYear, currentMonth, day).getDay();
+                const priorityDutyDay = isPriorityDutyDay(dayOfWeek);
+                let dayAssigned = false;
+                for (let p of personnelData) {
+                    if (p.duties[monthKey] && (p.duties[monthKey][day] === '1' || p.duties[monthKey][day] === 'O')) {
+                        dayAssigned = true;
+                        break;
+                    }
+                }
+                if (dayAssigned) continue; 
+
+                let eligiblePersonnel = [];
+                for (let p of personnelData) {
+                    if (!p.duties[monthKey]) p.duties[monthKey] = {};
+                    if (p.duties[monthKey][day] === 'X') continue;
+                    let prevDay = p.duties[monthKey][day - 1];
+                    let nextDay = p.duties[monthKey][day + 1];
+                    if ((prevDay === '1' || prevDay === 'O') || (nextDay === '1' || nextDay === 'O')) continue;
+                    
+                    let actualCount = Object.values(p.duties[monthKey]).filter(val => val === '1' || val === 'O').length;
+                    let term = getPersonnelTerm(p);
+                    let dayTermPriority = getDayTermPriority(dayOfWeek, term);
+                    if (mode === 'seniority') {
+                        let targetCount = targetCounts[p.id] || 1;
+                        if (actualCount >= targetCount) continue;
+                        eligiblePersonnel.push({
+                            person: p,
+                            actualCount: actualCount,
+                            targetCount: targetCount,
+                            effectiveCount: actualCount / targetCount,
+                            dayTermPriority: dayTermPriority
+                        });
+                    } else {
+                        eligiblePersonnel.push({
+                            person: p,
+                            actualCount: actualCount,
+                            targetCount: 0,
+                            effectiveCount: actualCount,
+                            dayTermPriority: dayTermPriority
+                        });
+                    }
+                }
+
+                if (eligiblePersonnel.length > 0) {
+                    eligiblePersonnel.sort((a, b) => {
+                        if (priorityDutyDay && a.dayTermPriority !== b.dayTermPriority) return a.dayTermPriority - b.dayTermPriority;
+                        if (a.effectiveCount !== b.effectiveCount) return a.effectiveCount - b.effectiveCount;
+                        if (a.actualCount !== b.actualCount) return a.actualCount - b.actualCount;
+                        if (mode === 'seniority' && a.targetCount !== b.targetCount) return b.targetCount - a.targetCount;
+                        return a.person.id - b.person.id;
+                    });
+                    let selectedPerson = eligiblePersonnel[0].person;
+                    selectedPerson.duties[monthKey][day] = '1';
+                    changesMade = true;
+                } else {
+                    unassignedDays.push(day);
+                }
+            }
+
+            if (changesMade) {
+                saveToStorage();
+                initTable();
+                if (unassignedDays.length > 0) {
+                    showWarning(`⚠️ Dağıtım yapıldı ancak bazı günler (${unassignedDays.join(', ')}) mazeret/kural/hedef sınırı nedeniyle boş kaldı!`);
+                } else {
+                    showWarning(`✅ Boş günlere ${modeText} dağıtım başarıyla tamamlandı!`, "success");
+                }
+            } else {
+                showWarning("⚠️ Dağıtılacak uygun personel bulunamadı.");
+            }
+        }
+
+        window.onload = initTable;
+    </script>
+</body>
+</html>
