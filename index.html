@@ -811,9 +811,13 @@
                                 let prevDuty = person.duties[monthKey][i - 1];
                                 let nextDuty = person.duties[monthKey][i + 1];
                                 
+                                let dutyTwoDaysAgo = person.duties[monthKey][i - 2];
+                                let dutyTwoDaysLater = person.duties[monthKey][i + 2];
+                                
                                 let existingDuty = personnelData.find(p => p.id !== person.id && p.duties[monthKey] && p.duties[monthKey][i] === '1');
                                 let assigning = existingDuty ? 'O' : '1';
 
+                                // ARDIŞIK GÜN KONTROLÜ (KESİN ENGEL)
                                 if (assigning === '1' && (prevDuty === '1' || nextDuty === '1')) {
                                     showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde nöbet (1) yazılamaz!`);
                                     return;
@@ -821,6 +825,15 @@
                                 if (assigning === 'O' && (prevDuty === 'O' || nextDuty === 'O')) {
                                     showWarning(`⚠️ ${escapeHtml(person.name)} için ardışık günlerde oryantasyon (O) yazılamaz!`);
                                     return;
+                                }
+                                
+                                // DOLDUR-BOŞALT KONTROLÜ (UYARI VE ONAY)
+                                let hasDoldurBosalt = (dutyTwoDaysAgo === '1' || dutyTwoDaysAgo === 'O' || dutyTwoDaysLater === '1' || dutyTwoDaysLater === 'O');
+                                if (hasDoldurBosalt) {
+                                    let confirmMsg = `⚠️ DİKKAT: ${escapeHtml(person.name)} isimli personele "Doldur-Boşalt" (1 gün istirahat sonrası tekrar nöbet) yazıyorsunuz!\n\nBu işleme devam etmek istediğinize emin misiniz?`;
+                                    if (!confirm(confirmMsg)) {
+                                        return; 
+                                    }
                                 }
 
                                 if (existingDuty) {
@@ -876,7 +889,7 @@
 
         function updateDailyStatus() {
             const statusRow = document.getElementById('dailyStatusRow');
-            statusRow.innerHTML = '<td colspan="2" style="text-align:right; font-size:11px; padding-right:10px;">GÜN DURUMU :</td>';
+            statusRow.innerHTML = '<td colspan="2" style="text-align:right; font-size:11px;">GÜN DURUMU:</td>';
             
             const daysRow = document.getElementById('daysRow');
             const tableBody = document.getElementById('tableBody');
